@@ -72,7 +72,7 @@ trueValue="true"
 # NOTE: X-Checksum-Sha256 is currently broken. See https://www.jfrog.com/jira/browse/RTFACT-9871
 args_checksums=" \
 --header X-Checksum-MD5:$(md5sum $abs_file | awk '{print $1}') \
---header X-Checksum-Sha1:$(shasum -a 1 $abs_file | awk '{ print $1 }') \
+--header X-Checksum-Sha1:$(sha1sum $abs_file | awk '{ print $1 }') \
 ";
 
 # echo $args_security $args_checksums "-T$abs_file" "$args_url"
