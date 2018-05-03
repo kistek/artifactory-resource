@@ -37,6 +37,9 @@ resources:
 * `file`: *Required for put* The file to upload to Artifactory  
 * `regex`: *Optional* overrides the source regex  
 * `folder`: *Optional.* appended to the repository in source - must start with forward slash /  
+* `properties`: *Optional for put* properties to associate with the upload
+* `sha256checksum`: *Optional for put* set the sha256 checksum when deploying. Values: ```true``` or ```false```(default).
+* `forcesha256checksum`: *Optional for put* force setting the checksum using /api/checksum/sha256. Values: ```true``` or ```false```(default).
 
 Saving/deploying an artifact to Artifactory in a pipeline job:  
 
@@ -109,6 +112,9 @@ Deploys the artifact.
 #### Parameters
 
 * `file`: *Required.* The path to the artifact to deploy.
+* `properties`: *Optional.*  String list of properties.  See https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#ArtifactoryRESTAPI-SetItemProperties
+* `sha256checksum`: *Optional* set the sha256 checksum when deploying. Values: ```true``` or ```false```(default).
+* `forcesha256checksum`: *Optional for put* force setting the checksum using /api/checksum/sha256. Values: ```true``` or ```false```(default).
 
 ## Credits
 This resource was originally based on the artifactory resource work of [mborges](https://github.com/mborges-pivotal/artifactory-resource).

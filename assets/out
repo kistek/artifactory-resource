@@ -30,6 +30,9 @@ repository=$(jq -r '.source.repository // ""' < $payload)
 folder=$(jq -r '.params.folder // ""' < $payload)
 file=$(jq -r '.params.file // ""' < $payload)
 paramRegex=$(jq -r '.params.regex // ""' < $payload)
+properties=$(jq -r '.params.properties // ""' < $payload)
+sha256checksum=$(jq -r '.params.sha256checksum // ""' < $payload)
+forcesha256checksum=$(jq -r '.params.forcesha256checksum // ""' < $payload)
 
 if [ -z "$endpoint" ]; then
   echo "invalid payload (missing endpoint)"
@@ -60,6 +63,11 @@ fi
 
 args_url="$args_url/$filename"
 
+if [ -n "$properties" ]; then
+	echo "adding properties $properties"
+	args_url="$args_url;$properties"
+fi
+
 args_security=
 
 [ -n "$username" ] && args_security="-u $username";
@@ -67,11 +75,24 @@ args_security=
 trueValue="true"
 [ -n "$skip_ssl_verification" ] && [ "${skip_ssl_verification,,}" = "${trueValue,,}" ] && args_security="$args_security -k";
 
+if [ "$sha256checksum" == "true" ]; then
+	echo "computing checksum"
+	sha256_checksum=$(sha256sum $abs_file | awk '{print $1}')
+	args_security="$args_security -H \"X-Checksum-Sha256:${sha256_checksum}\"";
+fi
+
 # echo "########## $filename, $file"
 
 # echo $args_security "-T $abs_file $args_url "
-curl $args_security "-T$abs_file" "$args_url"
+result=$(curl $args_security "-T$abs_file" "$args_url")
 
+if [ "$forcesha256checksum" == "true" ]; then
+	repo=$(echo $result | jq -r .repo)
+	path=$(echo $result | jq -r .path)
+	echo "calling /api/checksum/sha25 on repo=$repo, path=$path"
+
+	curl $args_security -H 'Content-Type: application/json' --data "{ \"repoKey\" : \"$repo\", \"path\" : \"$path\" }" "$endpoint/api/checksum/sha256"
+fi
 
 # echo $file $regex
 version=$(applyRegex_version $regex $filename)
