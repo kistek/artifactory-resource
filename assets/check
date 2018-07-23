@@ -15,6 +15,7 @@ endpoint=$(jq -r '.source.endpoint // ""' < $payload)
 regex=$(jq -r '.source.regex // ""' < $payload)
 username=$(jq -r '.source.username // ""' < $payload)
 password=$(jq -r '.source.password // ""' < $payload)
+auth_token=$(jq -r '.source.auth_token // ""' < $payload)
 skip_ssl_verification=$(jq -r '.source.skip_ssl_verification // ""' < $payload)
 
 repository=$(jq -r '.source.repository // ""' < $payload)
@@ -41,6 +42,7 @@ args_security=
 
 [ -n "$username" ] && args_security="-u $username";
 [ -n "$password" ] && args_security="$args_security:$password";
+[ -n "$auth_token" ] && args_security="-H \"Authorization: Bearer $auth_token\"";
 trueValue="true"
 [ -n "$skip_ssl_verification" ] && [ "${skip_ssl_verification,,}" = "${trueValue,,}" ] && args_security="$args_security -k";
 
