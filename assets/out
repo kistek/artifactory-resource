@@ -71,8 +71,8 @@ trueValue="true"
 
 # echo "########## $filename, $file"
 
-echo "$args_security" "-T$abs_file $args_url"
-curl "$args_security" "-T$abs_file" "$args_url"
+echo curl "$args_security" "-T$abs_file $args_url"
+curl $args_security "-T$abs_file" "$args_url"
 
 
 # echo $file $regex
