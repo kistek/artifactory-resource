@@ -61,18 +61,18 @@ fi
 
 args_url="$args_url/$filename"
 
-args_security=
+args_security=()
 
-[ -n "$username" ] && args_security="-u $username";
-[ -n "$password" ] && args_security="$args_security:$password";
-[ -n "$auth_token" ] && args_security="-H \"Authorization: Bearer $auth_token\"";
+[ -n "$username" ] && args_security=(-u "$username");
+[ -n "$password" ] && args_security+=(:"$password");
+[ -n "$auth_token" ] && args_security=(-H "Authorization: Bearer $auth_token");
 trueValue="true"
-[ -n "$skip_ssl_verification" ] && [ "${skip_ssl_verification,,}" = "${trueValue,,}" ] && args_security="$args_security -k";
+[ -n "$skip_ssl_verification" ] && [ "${skip_ssl_verification,,}" = "${trueValue,,}" ] && args_security+=(" -k");
 
 # echo "########## $filename, $file"
 
-echo curl "$args_security" "-T$abs_file $args_url"
-curl $args_security "-T$abs_file" "$args_url"
+echo curl "${args_security[@]}" "-T$abs_file $args_url"
+curl "${args_security[@]}" "-T$abs_file" "$args_url"
 
 
 # echo $file $regex
