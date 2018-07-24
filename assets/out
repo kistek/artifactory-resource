@@ -47,7 +47,7 @@ if [ -z "$file" ]; then
   exit 1
 fi
 
-abs_file="$(ls "$file")"
+abs_file="$(ls $file)" #do not quote $file to allow globbing
 filename="$(basename "$abs_file")"
 
 
