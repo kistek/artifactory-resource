@@ -33,7 +33,7 @@ get_files() {
 
 artifactory_get_folder_contents() {
   local artifacts_url=$1
-  curl $1
+  curl -f $1
 }
 
 # retrieve current from artifactory

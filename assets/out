@@ -84,14 +84,14 @@ fi
 # echo "########## $filename, $file"
 
 # echo $args_security "-T $abs_file $args_url "
-result=$(curl $args_security "-T$abs_file" "$args_url")
+result=$(curl -f $args_security "-T$abs_file" "$args_url")
 
 if [ "$forcesha256checksum" == "true" ]; then
 	repo=$(echo $result | jq -r .repo)
 	path=$(echo $result | jq -r .path)
 	echo "calling /api/checksum/sha25 on repo=$repo, path=$path"
 
-	curl $args_security -H 'Content-Type: application/json' --data "{ \"repoKey\" : \"$repo\", \"path\" : \"$path\" }" "$endpoint/api/checksum/sha256"
+	curl -f $args_security -H 'Content-Type: application/json' --data "{ \"repoKey\" : \"$repo\", \"path\" : \"$path\" }" "$endpoint/api/checksum/sha256"
 fi
 
 # echo $file $regex

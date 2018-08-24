@@ -83,8 +83,8 @@ fi
 
 args_url="$endpoint$repository$folder/$file"
 
-# echo $args_security "-O" "$args_url"
-curl $args_security "-O" "$args_url"
+# echo -f $args_security "-O" "$args_url"
+curl -f $args_security "-O" "$args_url"
 
 echo $file_json | jq '.[].version | {version: {version: .}}' >&3
 
