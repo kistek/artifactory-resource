@@ -81,7 +81,7 @@ if [ -z "$file" ]; then
   exit 1
 fi
 
-args_url="$endpoint$repository/$file"
+args_url="$endpoint$repository$folder/$file"
 
 # echo $args_security "-O" "$args_url"
 curl $args_security "-O" "$args_url"
