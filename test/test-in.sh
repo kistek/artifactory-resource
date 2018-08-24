@@ -60,8 +60,28 @@ it_can_get_version_from_artifactory_with_credentials() {
 
 }
 
+it_can_skip_download() {
+
+  # local local_ip=$(find_docker_host_ip)
+  #local_ip="localhost"
+
+  artifactory_ip=$ART_IP
+  TMPDIR=/tmp
+
+  local src=$(mktemp -d $TMPDIR/in-src.XXXXXX)
+  local endpoint="http://${artifactory_ip}:8081/artifactory"
+  local regex="ecd-front-(?<version>.*).tar.gz"
+  local folder="/generic/ecd-front"
+  local version="20161109222826"
+  local skip_download="true"
+
+  in_without_credentials_with_version_and_skip_download $endpoint $regex $folder $version $src $skip_download
+
+}
+
 #run it_can_get_version_from_artifactory
 run it_can_get_version_from_artifactory_with_credentials
+run it_can_skip_download
 
 # check for exit code > 0
 #run it_cant_get_version_from_artifactory

@@ -25,20 +25,21 @@ resources:
 
 ## Source Configuration
 
-* `endpoint`: *Required.* The Artifactory REST API endpoint. eg. http://YOUR-HOST_NAME:8081/artifactory.  
-* `repository`: *Required.* The Artifactory repository which includes any folder path, must contain a leading '/'. ```eg. /generic/product/pcf```  
-* `regex`: *Required.* Regular expression used to extract artifact version, must contain 'version' group. ```E.g. myapp-(?<version>.*).tar.gz```  
-* `username`: *Optional.* Username for HTTP(S) auth when accessing an authenticated repository  
-* `password`: *Optional.* Password for HTTP(S) auth when accessing an authenticated repository  
-* `skip_ssl_verification`: *Optional.* Skip ssl verification when connecting to Artifactory's APIs. Values: ```true``` or ```false```(default).  
+* `endpoint`: *Required.* The Artifactory REST API endpoint. eg. http://YOUR-HOST_NAME:8081/artifactory.
+* `repository`: *Required.* The Artifactory repository which includes any folder path, must contain a leading '/'. ```eg. /generic/product/pcf```
+* `regex`: *Required.* Regular expression used to extract artifact version, must contain 'version' group. ```E.g. myapp-(?<version>.*).tar.gz```
+* `username`: *Optional.* Username for HTTP(S) auth when accessing an authenticated repository
+* `password`: *Optional.* Password for HTTP(S) auth when accessing an authenticated repository
+* `skip_ssl_verification`: *Optional.* Skip ssl verification when connecting to Artifactory's APIs. Values: ```true``` or ```false```(default).
 
 ## Parameter Configuration
 
-* `file`: *Required for put* The file to upload to Artifactory  
-* `regex`: *Optional* overrides the source regex  
-* `folder`: *Optional.* appended to the repository in source - must start with forward slash /  
+* `file`: *Required for put* The file to upload to Artifactory
+* `regex`: *Optional* overrides the source regex
+* `folder`: *Optional.* appended to the repository in source - must start with forward slash /
+* `skip_download`: *Optional.* skip download of file. Useful for improving put performance by skipping the implicit get step using [get_params](https://concourse.ci/put-step.html#put-step-get-params).
 
-Saving/deploying an artifact to Artifactory in a pipeline job:  
+Saving/deploying an artifact to Artifactory in a pipeline job:
 
 ``` yaml
   jobs:
@@ -65,7 +66,7 @@ Saving/deploying an artifact to Artifactory in a pipeline job:
       params: { file: ./build/myapp-*.txt }
 ```
 
-Retrieving an artifact from Artifactory in a pipeline job:  
+Retrieving an artifact from Artifactory in a pipeline job:
 
 ``` yaml
 jobs:
@@ -88,7 +89,7 @@ jobs:
         - "Use file(s) from ./file-repository here..."
 ```
 
-See [pipeline.yml](https://github.com/pivotalservices/artifactory-resource/blob/master/pipeline.yml) for an example of a full pipeline definition file.  
+See [pipeline.yml](https://github.com/pivotalservices/artifactory-resource/blob/master/pipeline.yml) for an example of a full pipeline definition file.
 
 ## Resource behavior
 

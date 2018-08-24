@@ -84,7 +84,7 @@ check_without_credentials_with_version() {
       regex: $(echo $regex | jq -R .)
     },
     version: { version: $(echo $version| jq -R .)
-    }  
+    }
   }" | $resource_dir/check "$src" | tee /dev/stderr
 }
 
@@ -108,7 +108,7 @@ check_with_credentials_with_version() {
       password: $(echo $password | jq -R .)
     },
     version: { version: $(echo $version| jq -R .)
-    }  
+    }
   }" | $resource_dir/check "$src" | tee /dev/stderr
 }
 
@@ -128,7 +128,7 @@ in_without_credentials_with_version() {
       regex: $(echo $regex | jq -R .)
     },
     version: { version: $(echo $version| jq -R .)
-    }  
+    }
   }" | $resource_dir/in "$src" | tee /dev/stderr
 }
 
@@ -153,9 +153,34 @@ in_with_credentials_with_version() {
       regex: $(echo $regex | jq -R .)
     },
     version: { version: $(echo $version| jq -R .)
-    }  
+    }
   }" | $resource_dir/in "$src" | tee /dev/stderr
 }
+
+# IN
+in_without_credentials_with_version_and_skip_download() {
+
+  local endpoint=$1
+  local regex=$2
+  local folder=$3
+  local version=$4
+  local src=$5
+  local skip_download=$6
+
+  jq -n "{
+    params: {
+      skip_download: $(echo $skip_download | jq -R .)
+    },
+    source: {
+      endpoint: $(echo $endpoint | jq -R .),
+      repository: $(echo $folder | jq -R .),
+      regex: $(echo $regex | jq -R .)
+    },
+    version: { version: $(echo $version| jq -R .)
+    }
+  }" | $resource_dir/in "$src" | tee /dev/stderr
+}
+
 
 # OUT
 deploy_without_credentials() {
