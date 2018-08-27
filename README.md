@@ -25,12 +25,12 @@ resources:
 
 ## Source Configuration
 
-* `endpoint`: *Required.* The Artifactory REST API endpoint. eg. http://YOUR-HOST_NAME:8081/artifactory.
-* `repository`: *Required.* The Artifactory repository which includes any folder path, must contain a leading '/'. ```eg. /generic/product/pcf```
-* `regex`: *Required.* Regular expression used to extract artifact version, must contain 'version' group. ```E.g. myapp-(?<version>.*).tar.gz```
-* `username`: *Optional.* Username for HTTP(S) auth when accessing an authenticated repository
-* `password`: *Optional.* Password for HTTP(S) auth when accessing an authenticated repository
-* `skip_ssl_verification`: *Optional.* Skip ssl verification when connecting to Artifactory's APIs. Values: ```true``` or ```false```(default).
+* `endpoint`: *Required.* The Artifactory REST API endpoint. eg. http://YOUR-HOST_NAME:8081/artifactory.  
+* `repository`: *Required.* The Artifactory repository which includes any folder path, must contain a leading '/'. ```eg. /generic/product/pcf```  
+* `regex`: *Required.* Regular expression used to extract artifact version, must contain 'version' group and match the entire filename. ```E.g. myapp-(?<version>.*).tar.gz```  
+* `username`: *Optional.* Username for HTTP(S) auth when accessing an authenticated repository  
+* `password`: *Optional.* Password for HTTP(S) auth when accessing an authenticated repository  
+* `skip_ssl_verification`: *Optional.* Skip ssl verification when connecting to Artifactory's APIs. Values: ```true``` or ```false```(default).  
 
 ## Parameter Configuration
 
