@@ -91,17 +91,25 @@ args_checksums=" \
 --header X-Checksum-Sha1:$(sha1sum $abs_file | awk '{ print $1 }') \
 ";
 
-# echo $args_security $args_checksums "-T$abs_file" "$args_url"
+# echo curl $args_security $args_checksums "-T$abs_file" "$args_url"
+result=$(curl -sS $args_security $args_checksums "-T$abs_file" "$args_url")
 
-result=$(curl -f $args_security $args_checksums "-T$abs_file" "$args_url")
+if echo "$result" | jq -e 'has("errors")' >/dev/null ; then
+  echo "Endpoint returned server error:"
+  echo "$result" | jq -c '.errors'
+  exit 93
+else
+  echo $result
+fi
 
 if [ "$forcesha256checksum" == "true" ]; then
 	repo=$(echo $result | jq -r .repo)
 	path=$(echo $result | jq -r .path)
 	echo "calling /api/checksum/sha25 on repo=$repo, path=$path"
 
-	curl -f $args_security -H 'Content-Type: application/json' --data "{ \"repoKey\" : \"$repo\", \"path\" : \"$path\" }" "$endpoint/api/checksum/sha256"
+	curl -sS -f $args_security -H 'Content-Type: application/json' --data "{ \"repoKey\" : \"$repo\", \"path\" : \"$path\" }" "$endpoint/api/checksum/sha256"
 fi
+
 
 # echo $file $regex
 version=$(applyRegex_version $regex $filename)
