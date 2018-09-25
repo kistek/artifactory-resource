@@ -33,6 +33,7 @@ paramRegex=$(jq -r '.params.regex // ""' < $payload)
 properties=$(jq -r '.params.properties // ""' < $payload)
 sha256checksum=$(jq -r '.params.sha256checksum // ""' < $payload)
 forcesha256checksum=$(jq -r '.params.forcesha256checksum // ""' < $payload)
+ignore_http_codes="$(jq -rc '.params.ignore_http_codes // []' < $payload)"
 
 if [ -z "$endpoint" ]; then
   echo "invalid payload (missing endpoint)"
@@ -91,10 +92,16 @@ args_checksums=" \
 --header X-Checksum-Sha1:$(sha1sum $abs_file | awk '{ print $1 }') \
 ";
 
+if echo "$ignore_http_codes" | jq -e ". | length > 0" > /dev/null; then
+    echo "ignoring http response error codes: $ignore_http_codes"
+fi
+
 # echo curl $args_security $args_checksums "-T$abs_file" "$args_url"
 result=$(curl -sS $args_security $args_checksums "-T$abs_file" "$args_url")
 
-if test -n "$result" && echo "$result" | jq -e 'has("errors")' >/dev/null ; then
+if  test -n "$result" && \
+    echo "$result" | jq -e ".errors // [] | map(select( ([.status] - $ignore_http_codes) | length > 0 )) | length > 0" >/dev/null ; then
+
   echo "Endpoint returned server error:"
   echo "$result" | jq -c '.errors'
   exit 93

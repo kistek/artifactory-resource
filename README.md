@@ -41,6 +41,7 @@ resources:
 * `skip_download`: *Optional.* skip download of file. Useful for improving put performance by skipping the implicit get step using [get_params](https://concourse.ci/put-step.html#put-step-get-params).
 * `sha256checksum`: *Optional for put* set the sha256 checksum when deploying. Values: ```true``` or ```false```(default).
 * `forcesha256checksum`: *Optional for put* force setting the checksum using /api/checksum/sha256. Values: ```true``` or ```false```(default).
+* `ignore_http_codes`: *Optional for put* For the file upload, this is an array of http response codes which will not be considered an error. Example values ```[404, 403]``` or ```[]```(default). This may be useful, for example, when artifactory returns a `404` if the artifact already exists.
 
 Saving/deploying an artifact to Artifactory in a pipeline job:
 
@@ -67,6 +68,8 @@ Saving/deploying an artifact to Artifactory in a pipeline job:
             find .
     - put: file-repository
       params: { file: ./build/myapp-*.txt }
+        ignore_http_codes:
+        - 404
 ```
 
 Retrieving an artifact from Artifactory in a pipeline job:
@@ -116,6 +119,7 @@ Deploys the artifact.
 * `properties`: *Optional.*  String list of properties.  See https://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#ArtifactoryRESTAPI-SetItemProperties
 * `sha256checksum`: *Optional* set the sha256 checksum when deploying. Values: ```true``` or ```false```(default).
 * `forcesha256checksum`: *Optional for put* force setting the checksum using /api/checksum/sha256. Values: ```true``` or ```false```(default).
+* `ignore_http_codes`: *Optional for put* For the file upload, this is an array of http response codes which will not be considered an error. Example values ```[404, 403]``` or ```[]```(default). This may be useful, for example, when artifactory returns a `404` if the artifact already exists.
 
 ## Credits
 This resource was originally based on the artifactory resource work of [mborges](https://github.com/mborges-pivotal/artifactory-resource).
